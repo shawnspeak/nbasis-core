@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace NBasis
+﻿namespace NBasis
 {
     /// <summary>
     /// Static factory class for <see cref="Envelope{T}"/>.

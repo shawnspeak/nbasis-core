@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace NBasis
+﻿namespace NBasis
 {
     public static class EnumerableExtensions
     {

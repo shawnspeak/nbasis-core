@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace NBasis.Querying
+﻿namespace NBasis.Querying
 {
     public interface IHandleQueries
     {

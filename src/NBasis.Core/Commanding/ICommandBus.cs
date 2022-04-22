@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace NBasis.Commanding
+﻿namespace NBasis.Commanding
 {
     public interface ICommandBus
     {

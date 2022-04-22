@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NBasis
+﻿namespace NBasis
 {
     public class EnvironmentVariableMissingException : Exception
     {

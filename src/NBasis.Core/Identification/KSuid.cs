@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 /*
@@ -16,7 +13,7 @@ namespace NBasis.Identification
         private const int PayloadSize = 16;
         private const int TimestampSize = 4;
         private const uint Epoch = 1400000000;
-        private static readonly DateTime EpochDateTime = new DateTime(2014, 05, 13, 16, 53, 20, DateTimeKind.Utc);
+        private static readonly DateTime EpochDateTime = new(2014, 05, 13, 16, 53, 20, DateTimeKind.Utc);
 
         readonly uint _timestamp;
         readonly byte[] _payload;

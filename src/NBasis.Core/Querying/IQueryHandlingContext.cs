@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NBasis.Querying
+﻿namespace NBasis.Querying
 {
     public interface IQueryHandlingContext<TQuery, TResult> where TQuery : IQuery<TResult>
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace NBasis
+﻿namespace NBasis
 {
     public static class NullExtensions
     {
@@ -26,7 +22,7 @@ namespace NBasis
         /// <returns>Original value if it is not empty or null, or the alternate value otherwise.</returns>
         public static T Or<T>(this T original, T alternate)
         {
-            return null == original || original.Equals(default(T)) || (original is String && String.IsNullOrWhiteSpace(original.ToString()))
+            return null == original || original.Equals(default(T)) || (original is string && string.IsNullOrWhiteSpace(original.ToString()))
                 ? alternate
                 : original;
         }
@@ -62,7 +58,7 @@ namespace NBasis
         /// </returns>
         public static TValue Value<TObject, TValue>(this TObject context, Func<TObject, TValue> fn)
         {
-            return !ReferenceEquals(context, null) ? fn(context) : default;
+            return context is not null ? fn(context) : default;
         }
 
         /// <summary>

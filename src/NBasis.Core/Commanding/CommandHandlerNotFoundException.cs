@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NBasis.Commanding
+﻿namespace NBasis.Commanding
 {
     public class CommandHandlerNotFoundException : Exception
     {

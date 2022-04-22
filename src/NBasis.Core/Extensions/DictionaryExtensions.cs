@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NBasis
+﻿namespace NBasis
 {
     public static class DictionaryExtensions
     {

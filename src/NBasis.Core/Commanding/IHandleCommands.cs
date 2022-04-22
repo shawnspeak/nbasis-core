@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace NBasis.Commanding
+﻿namespace NBasis.Commanding
 {
     /// <summary>
     /// Marker interface for all command handlers

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NBasis.Querying
+﻿namespace NBasis.Querying
 {
     public class QueryHandlerInvocationException : Exception
     {

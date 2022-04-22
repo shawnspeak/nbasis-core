@@ -1,9 +1,5 @@
 ﻿using NBasis.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace NBasis.Querying
 {
@@ -11,7 +7,7 @@ namespace NBasis.Querying
     {
         private IDictionary<Type, QueryHandlerInvoker> _queryInvokers;
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static object _lock = new object();
+        private static object _lock = new();
 #pragma warning restore IDE0044 // Add readonly modifier
 
         public LocalQueryDispatcherFactory(ITypeFinder typeFinder)

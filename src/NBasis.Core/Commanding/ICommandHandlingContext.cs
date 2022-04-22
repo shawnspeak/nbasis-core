@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NBasis.Commanding
+﻿namespace NBasis.Commanding
 {
     public interface ICommandHandlingContext<out TCommand> where TCommand : ICommand
     {

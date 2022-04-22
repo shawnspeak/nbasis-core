@@ -1,9 +1,5 @@
 ﻿using NBasis.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace NBasis.Commanding
 {
@@ -11,7 +7,7 @@ namespace NBasis.Commanding
     {
         private IDictionary<Type, CommandHandlerInvoker> commandInvokers;
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static object _lock = new object();
+        private static object _lock = new();
 #pragma warning restore IDE0044 // Add readonly modifier
 
         public LocalCommandBusFactory(ITypeFinder typeFinder)
@@ -43,7 +39,7 @@ namespace NBasis.Commanding
             {
                 try
                 {
-                    List<Task> tasks = new List<Task>();
+                    List<Task> tasks = new();
                     commands.ForEach((command) =>
                     {
                         var body = CommandCleaner.Clean(command.Body);
