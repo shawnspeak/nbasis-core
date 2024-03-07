@@ -1,36 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NBasis.Handling;
+using System.ComponentModel.DataAnnotations;
 
 namespace NBasis.Querying
 {
     public abstract class QueryHandler<TQuery, TResult> : IHandleQueries<TQuery, TResult> where TQuery : IQuery<TResult>
     {
-        private IQueryHandlingContext<TQuery, TResult> context;
+        private IHandlingContext<TQuery, TResult> _context;
 
-        Task<TResult> IHandleQueries<TQuery, TResult>.HandleAsync(IQueryHandlingContext<TQuery, TResult> handlingContext)
+        Task<TResult> IHandler<TQuery, TResult>.HandleAsync(IHandlingContext<TQuery, TResult> handlingContext)
         {
-            context = handlingContext;
+            _context = handlingContext;
 
-            Validate(handlingContext.Query);
+            Validate(handlingContext.Input);
 
-            return Handle(handlingContext.Query);
+            return Handle(handlingContext.Input);
         }
 
         public IDictionary<string, object> Headers
         {
             get
             {
-                if ((context != null) && (context.Headers != null))
-                    return context.Headers;
-                return null;
-            }
-        }
-
-        public string CorrelationId
-        {
-            get
-            {
-                if (context != null)
-                    return context.CorrelationId;
+                if ((_context != null) && (_context.Headers != null))
+                    return _context.Headers;
                 return null;
             }
         }

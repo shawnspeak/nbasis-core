@@ -4,7 +4,7 @@ namespace NBasis.Commanding
 {
     internal class CommandCleaner
     {
-        public static ICommand Clean(ICommand input)
+        public static ICommand<TResult> Clean<TResult>(ICommand<TResult> input)
         {
             // look for no clean
             var flags = CommandCleaner.GetFlags(input);
@@ -49,7 +49,7 @@ namespace NBasis.Commanding
             return input;
         }
 
-        private static CleanupFlags GetFlags(ICommand input)
+        private static CleanupFlags GetFlags<TResult>(ICommand<TResult> input)
         {
             // nothing to clean
             if (input == null) return CleanupFlags.None;

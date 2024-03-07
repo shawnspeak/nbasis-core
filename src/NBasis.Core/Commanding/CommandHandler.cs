@@ -1,36 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NBasis.Handling;
+using System.ComponentModel.DataAnnotations;
 
 namespace NBasis.Commanding
 {
-    public abstract class CommandHandler<TCommand> : IHandleCommands<TCommand> where TCommand : ICommand
+    public abstract class CommandHandler<TCommand, TResult> : IHandleCommands<TCommand, TResult> where TCommand : ICommand<TResult>
     {
-        private ICommandHandlingContext<TCommand> context;
+        private IHandlingContext<TCommand, TResult> _context;
 
-        Task IHandleCommands<TCommand>.HandleAsync(ICommandHandlingContext<TCommand> handlingContext)
+        Task<TResult> IHandler<TCommand, TResult>.HandleAsync(IHandlingContext<TCommand, TResult> handlingContext)
         {
-            context = handlingContext;
+            _context = handlingContext;
 
-            Validate(handlingContext.Command);
+            Validate(handlingContext.Input);
 
-            return Handle(handlingContext.Command);
+            return Handle(handlingContext.Input);
         }
 
         public IDictionary<string, object> Headers
         {
             get
             {
-                if ((context != null) && (context.Headers != null))
-                    return context.Headers;
-                return null;
-            }
-        }
-
-        public string CorrelationId
-        {
-            get
-            {
-                if (context != null)
-                    return context.CorrelationId;
+                if ((_context != null) && (_context.Headers != null))
+                    return _context.Headers;
                 return null;
             }
         }
@@ -41,11 +32,6 @@ namespace NBasis.Commanding
             Validator.ValidateObject(command, validationContext, true);
         }
 
-        public abstract Task Handle(TCommand command);
-
-        protected void SetReturnValue(object value)
-        {
-            context.SetReturn(value);
-        }
+        public abstract Task<TResult> Handle(TCommand command);
     }
 }

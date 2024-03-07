@@ -28,7 +28,7 @@
             Direction = direction;
         }
 
-        public string Name { get;  }
+        public string Name { get; }
 
         public SortDirection Direction { get; }
 

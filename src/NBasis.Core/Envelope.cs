@@ -8,12 +8,9 @@
         /// <summary>
         /// Creates an envelope for the given body.
         /// </summary>
-        public static Envelope<T> Create<T>(T body, IDictionary<string, object> headers = null, string correlationId = null)
+        public static Envelope<T> Create<T>(T body, IDictionary<string, object> headers = null)
         {
-            return new Envelope<T>(body, headers)
-            {
-                CorrelationId = correlationId
-            };
+            return new Envelope<T>(body, headers);
         }
     }
 
@@ -40,22 +37,7 @@
         /// Gets the headers
         /// </summary>
         public IDictionary<string, object> Headers { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the delay for sending, enqueing or processing the body
-        /// </summary>
-        public TimeSpan Delay { get; set; }
-
-        /// <summary>
-        /// Gets or sets the time to live for the message
-        /// </summary>
-        public TimeSpan TimeToLive { get; set; }
-
-        /// <summary>
-        /// Gets the correlation id.
-        /// </summary>
-        public string CorrelationId { get; set; }
-
+        
         /// <summary>
         /// Add a set of headers to the evelope
         /// </summary>
@@ -63,8 +45,7 @@
         public void AddHeaders(IDictionary<string, object> headers)
         {
             if (headers == null) return;
-            if (Headers == null)
-                Headers = new Dictionary<string, object>();
+            Headers ??= new Dictionary<string, object>();
             headers.CopyTo(Headers);
         }
     }

@@ -17,17 +17,21 @@ namespace NBasis.Validation
 
             // value must be required
             if (string.IsNullOrWhiteSpace(input))
-                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
+            {
+                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName), validationContext.DisplayName.Yield());
+            }
 
             // can't parse guid
             if (!Guid.TryParse(input, out Guid guid))
             {
                 // not a validstring representation of a guid
-                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
+                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName), validationContext.DisplayName.Yield());
             }
 
             if (guid == Guid.Empty)
-                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
+            {
+                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName), validationContext.DisplayName.Yield());
+            }
 
             return null;
         }

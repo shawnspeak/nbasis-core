@@ -13,10 +13,7 @@
     {
         readonly CleanupFlags _level;
 
-        public CommandCleanupAttribute(CleanupFlags level = CleanupFlags.TrimString)
-        {
-            _level = level;
-        }
+        public CommandCleanupAttribute(CleanupFlags level = CleanupFlags.TrimString) => _level = level;
 
         public CleanupFlags Levels
         {

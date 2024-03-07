@@ -26,25 +26,33 @@ namespace NBasis.Validation
         {
             if ((value == null) &&
                 (_allowNull))
+            {
                 return null;
+            }
 
             if (value != null)
             {
                 // check values
                 if ((value is int intValue) &&
                     (_ints.Contains(intValue)))
+                {
                     return null;
+                }
 
                 if ((value is Guid guidValue) &&
                     (_strings.Any(s => s.Equals(guidValue.ToString(), StringComparison.CurrentCultureIgnoreCase))))
+                {
                     return null;
+                }
 
                 if ((value is string stringValue) &&
                     (_strings.Contains(stringValue)))
+                {
                     return null;
+                }
             }
 
-            return new ValidationResult(string.Format(ErrorMessageString, value?.ToString() ?? "null", validationContext.DisplayName));
+            return new ValidationResult(string.Format(ErrorMessageString, value?.ToString() ?? "null", validationContext.DisplayName), validationContext.DisplayName.Yield());
         }
     }
 }

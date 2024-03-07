@@ -1,8 +1,10 @@
-﻿namespace NBasis.Commanding
+﻿using NBasis.Handling;
+
+namespace NBasis.Commanding
 {
-    public class CommandHandlerInvocationException : Exception
+    public class CommandHandlerInvocationException<TCommand, TOutput> : Exception
     {
-        public ICommandHandlingContext<ICommand> HandlingContext { get; set; }
+        public IHandlingContext<TCommand, TOutput> HandlingContext { get; set; }
 
         public CommandHandlerInvocationException(string message, Exception innerException)
             : base(message, innerException)

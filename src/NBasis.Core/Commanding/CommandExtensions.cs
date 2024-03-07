@@ -15,41 +15,31 @@ namespace NBasis.Commanding
     public class CommandOptions
     {
         /// <summary>
-        /// Called when the bus has succeeded
+        /// Called when the commander has succeeded
         /// </summary>
         public Func<OptionContext, Task> OnSuccess = null;
 
         /// <summary>
-        /// Catch all exceptions in the command bus
+        /// Catch all exceptions in the commander
         /// </summary>
-        /// <remarks>If handled, then the delegate can return true to stop the bus from throwing the exception</remarks>
+        /// <remarks>If handled, then the delegate can return true to stop the commander from throwing the exception</remarks>
         public Func<Exception, Task<bool>> OnException = null;
     }
 
-    public static class CommandExtensions
+    public static class CommanderExtensions
     {
-        public static Task SendAsync(this ICommandBus bus, Envelope<ICommand> envelopedCommand)
+        public static Task<TResult> AskAsync<TResult>(this ICommander commander, ICommand<TResult> command, IDictionary<string, object> headers = null)
         {
-            return bus.SendAsync(envelopedCommand.Yield());
-        }
-
-        public static Task SendAsync(this ICommandBus bus, ICommand command, IDictionary<string, object> headers = null)
-        {
-            return bus.SendAsync(new Envelope<ICommand>(command, headers));
-        }
-
-        public static Task<TResult> AskAsync<TResult>(this ICommandBus bus, ICommand command, IDictionary<string, object> headers = null)
-        {
-            return bus.AskAsync<TResult>(new Envelope<ICommand>(command, headers));
+            return commander.AskAsync<TResult>(new Envelope<ICommand<TResult>>(command, headers));
         }
 
         public static IServiceCollection AddLocalCommanding(this IServiceCollection serviceCollection, CommandOptions options = null)
         {
             return serviceCollection
-                    .AddSingleton<ICommandBusFactory, LocalCommandBusFactory>()
-                    .AddScoped<ICommandBus>((sp) =>
+                    .AddSingleton<ICommanderFactory, LocalCommanderFactory>()
+                    .AddScoped<ICommander>((sp) =>
                     {
-                        return sp.GetService<ICommandBusFactory>().GetCommandBus(sp, options);
+                        return sp.GetService<ICommanderFactory>().GetCommander(sp, options);
                     });
         }
     }

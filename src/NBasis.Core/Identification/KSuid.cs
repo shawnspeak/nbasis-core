@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NBasis.Identification
 {
-    public class KSuid : IComparable, IComparable<KSuid>, IEquatable<KSuid>
+    public readonly struct KSuid : IComparable, IComparable<KSuid>, IEquatable<KSuid>
     {
         private const int EncodedSize = 27;
         private const int PayloadSize = 16;
@@ -18,13 +18,20 @@ namespace NBasis.Identification
         readonly uint _timestamp;
         readonly byte[] _payload;
 
+        public static readonly KSuid Empty = new(new byte[PayloadSize], 0);
+
         /// <summary>
         /// Initialize a new KSuid
         /// </summary>
         /// <returns>A new KSuid object</returns>
         public static KSuid NewKSuid()
         {
-            return new KSuid();
+            var payload = new byte[PayloadSize];
+
+            var random = RandomNumberGenerator.Create();
+            random.GetNonZeroBytes(payload);
+
+            return new KSuid(payload, Convert.ToUInt32(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - Epoch));
         }
 
         /// <summary>
@@ -53,21 +60,11 @@ namespace NBasis.Identification
             }
             catch (Exception)
             {
-                result = null;
+                result = Empty;
                 return false;
             }
             
             return true;
-        }
-
-        private KSuid()
-        {
-            _payload = new byte[PayloadSize];
-
-            var random = RandomNumberGenerator.Create();
-            random.GetNonZeroBytes(_payload);
-
-            _timestamp = Convert.ToUInt32(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - Epoch);
         }
 
         public KSuid(byte[] payload, uint timestamp)
@@ -173,8 +170,6 @@ namespace NBasis.Identification
 
         public bool Equals(KSuid other)
         {
-            if (other == null)
-                return false;
             return other.Timestamp == Timestamp && other.Payload.SequenceEqual(Payload);
         }
 
@@ -185,18 +180,6 @@ namespace NBasis.Identification
 
         public static bool operator ==(KSuid a, KSuid b)
         {
-            // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
-            {
-                return true;
-            }
-
-            // If one is null, but not both, return false.
-            if ((a is null) || (b is null))
-            {
-                return false;
-            }
-
             return a.Timestamp == b.Timestamp && a.Payload.SequenceEqual(b.Payload);
         }
 
@@ -207,16 +190,6 @@ namespace NBasis.Identification
 
         public static bool operator >(KSuid a, KSuid b)
         {
-            if (System.Object.ReferenceEquals(a, b))
-            {
-                return false;
-            }
-
-            if ((a is null) || (b is null))
-            {
-                return false;
-            }
-
             if (a == b)
             {
                 return false;
@@ -227,16 +200,6 @@ namespace NBasis.Identification
 
         public static bool operator <(KSuid a, KSuid b)
         {
-            if (System.Object.ReferenceEquals(a, b))
-            {
-                return false;
-            }
-
-            if ((a is null) || (b is null))
-            {
-                return false;
-            }
-
             if (a == b)
             {
                 return false;
@@ -277,7 +240,6 @@ namespace NBasis.Identification
             result.InsertRange(0, Enumerable.Repeat(0, leadingZeroCount));
             return result.ToArray();
         }
-
 
         private static string ToBase62(byte[] input)
         {

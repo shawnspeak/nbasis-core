@@ -71,18 +71,5 @@
         {
             return list ?? Enumerable.Empty<T>();
         }
-
-        /// <summary>
-        /// Safe count any IEnumerable even null lists
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="nullCountAs"></param>
-        /// <returns></returns>
-        public static int SafeCount<T>(this IEnumerable<T> list, int nullCountAs = 0)
-        {
-            if (list == null) return nullCountAs;
-            return list.Count();
-        }
     }
 }

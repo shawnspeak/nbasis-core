@@ -1,4 +1,6 @@
-﻿namespace NBasis.Commanding
+﻿using NBasis.Handling;
+
+namespace NBasis.Commanding
 {
     /// <summary>
     /// Marker interface for all command handlers
@@ -7,8 +9,7 @@
     {
     }
 
-    public interface IHandleCommands<TCommand> : IHandleCommands where TCommand : ICommand
-    {
-        Task HandleAsync(ICommandHandlingContext<TCommand> handlingContext);
+    public interface IHandleCommands<TCommand, TResult> : IHandler<TCommand, TResult>, IHandleCommands where TCommand : ICommand<TResult>
+    {   
     }
 }

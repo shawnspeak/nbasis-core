@@ -98,28 +98,16 @@
         }
 
         /// <summary>
-        /// Chunk an enumerable into smaller fixed size chunks
+        /// Safe count any IEnumerable even null lists
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="nullCountAs"></param>
         /// <returns></returns>
-        public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> items, int chunkSize)
+        public static int SafeCount<T>(this IEnumerable<T> list, int nullCountAs = 0)
         {
-            if (chunkSize < 2)
-                throw new ArgumentOutOfRangeException(nameof(chunkSize), "chunkSize must be greater than 1");
-
-            int skip = 0;
-            int read = items.SafeCount();
-            while (read > 0)
-            {
-                // take a page
-                var page = items.Skip(skip).Take(chunkSize).ToList();
-                read = page.Count;
-                skip += read;
-                if (read > 0)
-                    yield return page;
-
-                if (read < chunkSize)
-                    break; // we are done
-            }
+            if (list == null) return nullCountAs;
+            return list.Count();
         }
     }
 }

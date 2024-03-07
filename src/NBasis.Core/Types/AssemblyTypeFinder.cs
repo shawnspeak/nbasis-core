@@ -3,60 +3,13 @@ using System.Reflection;
 
 namespace NBasis.Types
 {
-    public class AssemblyTypeFinder : ITypeFinder
+    /// <summary>
+    /// Finds types in the given assemblies
+    /// </summary>
+    public class AssemblyTypeFinder : TypeFinder
     {
-        readonly IEnumerable<Type> _allTypes;
-
-        public AssemblyTypeFinder(IEnumerable<Assembly> assemblies)
+        public AssemblyTypeFinder(IEnumerable<Assembly> assemblies) : base(LoadTypes(assemblies))
         {
-            _allTypes = LoadTypes(assemblies);
-        }
-
-        public IEnumerable<Type> AllLoadedTypes
-        {
-            get { return _allTypes; }
-        }
-
-        public IEnumerable<Type> GetDerivedTypes<TBase>() where TBase : class
-        {
-            var baseType = typeof(TBase);
-
-            IEnumerable<Type> derivedTypes()
-            {
-                foreach (var derivedType in _allTypes)
-                {
-                    if (baseType != derivedType)
-                    {
-                        if (baseType.GetTypeInfo().IsAssignableFrom(derivedType.GetTypeInfo()))
-                        {
-                            yield return derivedType;
-                        }
-                    }
-                }
-            }
-
-            return derivedTypes().ToArray();
-        }
-
-        public IEnumerable<Type> GetInterfaceImplementations<TInterface>() where TInterface : class
-        {
-            IEnumerable<Type> derivedTypes()
-            {
-                foreach (var derivedType in _allTypes)
-                {
-                    if (!derivedType.GetTypeInfo().IsInterface)
-                    {
-                        foreach (var interfaceType in derivedType.GetTypeInfo().ImplementedInterfaces)
-                        {
-                            if (interfaceType == typeof(TInterface))
-                            {
-                                yield return derivedType;
-                            }
-                        }
-                    }
-                }
-            }
-            return derivedTypes().Distinct().ToArray();
         }
 
         private static IEnumerable<Type> LoadTypes(IEnumerable<Assembly> assemblies)

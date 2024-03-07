@@ -4,7 +4,7 @@ namespace NBasis.Commanding
 {
     public class CommandValidationException : ValidationException
     {
-        public string Code { get; private set; }
+        public string Code { get; }
 
         public CommandValidationException(string message) : base(message)
         {
