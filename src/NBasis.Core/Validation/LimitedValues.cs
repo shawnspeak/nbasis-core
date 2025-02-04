@@ -7,7 +7,9 @@ namespace NBasis.Validation
         private const string DefaultErrorMessage = "'{0}' is not a recognized value for {1}";
 
         readonly string[] _strings;
+
         readonly int[] _ints;
+
         readonly bool _allowNull;
 
         public LimitedValues(string[] stringValues, bool allowNull = false, string errorMessage = DefaultErrorMessage) : base(errorMessage)

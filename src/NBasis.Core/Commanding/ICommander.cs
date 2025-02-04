@@ -3,10 +3,8 @@
     public interface ICommander
     {
         /// <summary>
-        /// Send a command and return a result
+        /// Ask a command to execute and return a result
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="command"></param>
-        Task<TResult> AskAsync<TResult>(Envelope<ICommand<TResult>> command);
+        Task<TResult> AskAsync<TCommand, TResult>(Envelope<TCommand> command) where TCommand : ICommand<TResult>;
     }
 }

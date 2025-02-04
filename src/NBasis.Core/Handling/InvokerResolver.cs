@@ -26,7 +26,7 @@ namespace NBasis.Handling
                     {
                         var invokers = new Dictionary<Type, HandlerInvoker>();
 
-                        // get all of the handlers the typefinder knows about
+                        // get all of the handlers the type finder knows about
                         foreach (var handlerType in typeFinder.GetInterfaceImplementations<THandler>())
                         {
                             foreach (var inputType in GetInputTypesForHandler(handlerType))
@@ -34,7 +34,7 @@ namespace NBasis.Handling
                                 if (invokers.ContainsKey(inputType))
                                     throw new DuplicateHandlersException(inputType);
 
-                                var outputType = GetOutputTypeForHandler(inputType);
+                                var outputType = GetOutputTypeForHandler(handlerType);
                                 invokers.Add(inputType, new HandlerInvoker(inputType, outputType, handlerType));
                             }
                         }
@@ -55,7 +55,7 @@ namespace NBasis.Handling
         {
             return (from interfaceType in handlerType.GetTypeInfo().ImplementedInterfaces
                     where interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IHandler<,>)
-                    select interfaceType.GetTypeInfo().GenericTypeArguments[1]).First();
+                    select interfaceType.GetTypeInfo().GenericTypeArguments).First().Skip(1).First();
         }
 
         internal HandlerInvoker GetTheHandler(Type input)

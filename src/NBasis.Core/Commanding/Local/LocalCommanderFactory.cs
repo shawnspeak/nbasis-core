@@ -20,7 +20,9 @@ namespace NBasis.Commanding
         private class Commander : ICommander
         {
             readonly IServiceProvider _serviceProvider;
+
             readonly InvokerResolver<IHandleCommands> _resolver;
+
             readonly CommandOptions _options;
 
             private int _commandLevel = 0;
@@ -30,9 +32,10 @@ namespace NBasis.Commanding
                 _serviceProvider = serviceProvider;
                 _resolver = resolver;
                 _options = options;
-            }         
+            }
 
-            public async Task<TResult> AskAsync<TResult>(Envelope<ICommand<TResult>> command)
+            public async Task<TResult> AskAsync<TCommand, TResult>(Envelope<TCommand> command)
+                where TCommand : ICommand<TResult>
             {
                 TResult result = default;
                 try
@@ -41,7 +44,7 @@ namespace NBasis.Commanding
 
                     var handler = _resolver.GetTheHandler(body.GetType()) ?? throw new CommandHandlerNotFoundException(body.GetType());
 
-                    var context = await handler.Invoke<ICommand<TResult>, TResult>(_serviceProvider, body, command.Headers);
+                    var context = await handler.Invoke<TCommand, TResult>(_serviceProvider, command.Body, command.Headers);
 
                     result = context.Output;
 

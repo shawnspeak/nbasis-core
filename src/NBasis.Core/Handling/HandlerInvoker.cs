@@ -1,13 +1,16 @@
-﻿using NBasis.Commanding;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NBasis.Commanding;
 using NBasis.Querying;
 using System.Reflection;
 
 namespace NBasis.Handling
 {
     internal class HandlerInvoker
-    {        
+    {
         readonly Type _handlerType;
+
         readonly Type _inputType;
+
         readonly Type _outputType;
 
         public HandlerInvoker(Type inputType, Type outputType, Type handlerType)
@@ -28,7 +31,7 @@ namespace NBasis.Handling
         private async Task<TOutput> InvokeTheHandlerAsync<TInput, TOutput>(IServiceProvider serviceProvider, IHandlingContext<TInput, TOutput> handlingContext)
         {
             var handleMethod = GetTheHandleMethod();
-            var handler = serviceProvider.GetService(_handlerType);
+            var handler = ActivatorUtilities.CreateInstance(serviceProvider, _handlerType);
 
             try
             {
@@ -41,16 +44,16 @@ namespace NBasis.Handling
                 {
                     throw new CommandHandlerInvocationException<TInput, TOutput>(
                         string.Format("Command handler '{0}' for '{1}' failed. Inspect inner exception.", handler.GetType().Name, handlingContext.Input.GetType().Name),
-                                                                      ex.InnerException)
+                        ex.InnerException)
                     {
                         HandlingContext = handlingContext
                     };
-                } 
+                }
                 else if (_inputType.GetInterface(nameof(IQuery<TOutput>)) != null)
                 {
                     throw new QueryHandlerInvocationException<TInput, TOutput>(
                         string.Format("Query handler '{0}' for '{1}' failed. Inspect inner exception.", handler.GetType().Name, handlingContext.Input.GetType().Name),
-                                                                                                                    ex.InnerException)
+                        ex.InnerException)
                     {
                         HandlingContext = handlingContext
                     };
@@ -59,7 +62,7 @@ namespace NBasis.Handling
                 {
                     throw new HandlerInvocationException<TInput, TOutput>(
                         string.Format("Handler '{0}' for '{1}' failed. Inspect inner exception.", handler.GetType().Name, handlingContext.Input.GetType().Name),
-                                                                                                                    ex.InnerException)
+                        ex.InnerException)
                     {
                         HandlingContext = handlingContext
                     };

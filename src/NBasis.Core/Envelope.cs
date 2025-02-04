@@ -39,7 +39,7 @@
         public IDictionary<string, object> Headers { get; private set; }
         
         /// <summary>
-        /// Add a set of headers to the evelope
+        /// Add a set of headers to the envelope
         /// </summary>
         /// <param name="headers"></param>
         public void AddHeaders(IDictionary<string, object> headers)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace NBasis.Commanding
 {
@@ -30,7 +31,17 @@ namespace NBasis.Commanding
     {
         public static Task<TResult> AskAsync<TResult>(this ICommander commander, ICommand<TResult> command, IDictionary<string, object> headers = null)
         {
-            return commander.AskAsync<TResult>(new Envelope<ICommand<TResult>>(command, headers));
+             // get type of command
+            var commandType = command.GetType();
+            var resultType = typeof(TResult);
+
+            // build envelope
+            var envelopeType = typeof(Envelope<>).MakeGenericType(commandType);
+            var envelope = Activator.CreateInstance(envelopeType, command, headers);
+
+            var methodInfo = typeof(ICommander).GetTypeInfo().GetDeclaredMethod("AskAsync");
+            
+            return (Task<TResult>)methodInfo.MakeGenericMethod(commandType, resultType).Invoke(commander, new[] { envelope });
         }
 
         public static IServiceCollection AddLocalCommanding(this IServiceCollection serviceCollection, CommandOptions options = null)

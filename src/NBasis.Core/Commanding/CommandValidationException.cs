@@ -8,7 +8,6 @@ namespace NBasis.Commanding
 
         public CommandValidationException(string message) : base(message)
         {
-
         }
 
         public CommandValidationException(string message, string code) : base(message)

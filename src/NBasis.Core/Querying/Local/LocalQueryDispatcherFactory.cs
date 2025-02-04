@@ -4,7 +4,7 @@ using NBasis.Types;
 namespace NBasis.Querying
 {
     public class LocalQueryDispatcherFactory : IQueryDispatcherFactory
-    {        
+    {
         readonly InvokerResolver<IHandleQueries> _resolver;
 
         public LocalQueryDispatcherFactory(ITypeFinder typeFinder)
@@ -20,6 +20,7 @@ namespace NBasis.Querying
         private class QueryDispatcher : IQueryDispatcher
         {
             readonly IServiceProvider _serviceProvider;
+
             readonly InvokerResolver<IHandleQueries> _resolver;
 
             public QueryDispatcher(IServiceProvider serviceProvider, InvokerResolver<IHandleQueries> resolver)

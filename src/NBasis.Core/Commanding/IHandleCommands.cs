@@ -10,6 +10,6 @@ namespace NBasis.Commanding
     }
 
     public interface IHandleCommands<TCommand, TResult> : IHandler<TCommand, TResult>, IHandleCommands where TCommand : ICommand<TResult>
-    {   
+    {
     }
 }

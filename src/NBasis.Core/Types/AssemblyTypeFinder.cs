@@ -12,7 +12,7 @@ namespace NBasis.Types
         {
         }
 
-        private static IEnumerable<Type> LoadTypes(IEnumerable<Assembly> assemblies)
+        private static List<Type> LoadTypes(IEnumerable<Assembly> assemblies)
         {
             var loadedTypes = new List<Type>();
             foreach (var assembly in assemblies)
